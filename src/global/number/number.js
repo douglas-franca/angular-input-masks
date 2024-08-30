@@ -81,6 +81,12 @@ function NumberMaskDirective($locale, $parse) {
 					viewMask = NumberMasks.viewMask(decimals, decimalDelimiter, thousandsDelimiter);
 					modelMask = NumberMasks.modelMask(decimals);
 
+					const newValue = parseFloat(ctrl.$modelValue);
+					if (!isNaN(newValue) && !ctrl.$isEmpty(newValue)) {
+						ctrl.$setViewValue(newValue.toFixed(decimals));
+						ctrl.$render();
+					}
+
 					parser(ctrl.$viewValue);
 				});
 			}

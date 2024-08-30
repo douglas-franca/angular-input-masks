@@ -163,4 +163,27 @@ describe('ui-number-mask', function() {
 		expect(model.$viewValue).toBe('');
 		expect(model.$modelValue).toBe(null);
 	});
+
+	it('should change the number of decimals dynamically and keep the value', angular.mock.inject(function($timeout) {
+		const input = TestUtil.compile('<input ng-model="model" ui-number-mask="{{ decimals }}">', {
+			model: 1234.56,
+			decimals: 2
+		});
+
+		const model = input.controller('ngModel');
+
+		expect(model.$viewValue).toBe('1,234.56');
+
+		input.scope().decimals = 3;
+
+		$timeout(() => {
+			expect(model.$viewValue).toBe('1,234.560');
+
+			input.scope().decimals = 1;
+
+			$timeout(() => {
+				expect(model.$viewValue).toBe('1,234.5');
+			});
+		});
+	}));
 });
